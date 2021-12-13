@@ -17,13 +17,23 @@ namespace DevEvents.API.Controllers
     }
 
     [HttpGet]
-    public IActionResult obterTodos()
+    public IActionResult BuscarTodos()
     {
       return Ok(_context.Categorias);
     }
 
+    /*
+    [HttpGet]
+    [Route("obterTodosAsync")]
+    public async Task<ActionResult<IEnumerable<Categoria>>> obterTodosAsync()
+    {
+      var categoria = await _context.Categorias.ToListAsync();
+      return categoria;
+    }
+    */
+
     [HttpGet("{id}")]
-    public IActionResult ObterCategoria(int id)
+    public IActionResult BuscarCategoriaPeloId(int id)
     {
       var categoria = _context.Categorias.FirstOrDefault(categoria => categoria.Id == id);
 
@@ -40,13 +50,10 @@ namespace DevEvents.API.Controllers
     {
       var categoria = new Categoria();
 
-      categoria.Id = categoriaForm.Id;
-      categoria.Descricao = categoriaForm.Descricao;
-
       _context.Categorias.Add(categoria);
       _context.SaveChanges();
 
-      return NoContent();
+      return CreatedAtAction(nameof(BuscarTodos), new { Id = categoriaForm.Id });
     }
 
     [HttpPut("{id}")]
@@ -69,6 +76,16 @@ namespace DevEvents.API.Controllers
     [HttpDelete("{id}")]
     public IActionResult Deletar(int id)
     {
+      var categoria = _context.Categorias.SingleOrDefault(categoria => categoria.Id == id);
+
+      if (categoria == null)
+      {
+        return NotFound();
+      }
+
+      _context.Categorias.Remove(categoria);
+      _context.SaveChanges();
+
       return Ok();
     }
   }

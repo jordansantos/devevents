@@ -21,6 +21,11 @@ namespace DevEvents.API.Persistencia
         .HasKey(e => e.Id);
 
       modelBuilder.Entity<Evento>()
+        .Property(e => e.Id)
+        .IsRequired(true)
+        .ValueGeneratedOnAdd();
+
+      modelBuilder.Entity<Evento>()
         .HasOne(e => e.Categoria)
         .WithMany()
         .HasForeignKey(e => e.IdCategoria);
@@ -45,6 +50,28 @@ namespace DevEvents.API.Persistencia
 
       modelBuilder.Entity<Usuario>()
         .HasKey(e => e.Id);
+
+      modelBuilder.Entity<Usuario>()
+        .Property(e => e.Id)
+        .IsRequired(true)
+        .ValueGeneratedOnAdd();
+
+      modelBuilder.Entity<Usuario>()
+        .Property(e => e.NomeCompleto)
+        .IsRequired(true)
+        .HasMaxLength(100);
+
+      modelBuilder.Entity<Usuario>()
+        .Property(e => e.DataNascimento)
+        .IsRequired(true);
+
+      modelBuilder.Entity<Usuario>()
+        .Property(e => e.Email)
+        .IsRequired(true);
+
+      modelBuilder.Entity<Usuario>()
+        .Property(e => e.IsAtivo)
+        .IsRequired(true);
     }
   }
 }

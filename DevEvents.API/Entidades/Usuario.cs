@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DevEvents.API.Entidades
 {
@@ -10,5 +11,6 @@ namespace DevEvents.API.Entidades
     public string Email { get; set; }
     public DateTime DataCadastro { get; set; }
     public bool IsAtivo { get; set; }
+    public List<Inscricao> Inscricoes { get; set; }
   }
 }

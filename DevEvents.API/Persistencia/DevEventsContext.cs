@@ -72,6 +72,26 @@ namespace DevEvents.API.Persistencia
       modelBuilder.Entity<Usuario>()
         .Property(e => e.IsAtivo)
         .IsRequired(true);
+
+      modelBuilder.Entity<Inscricao>()
+        .HasKey(e => e.Id);
+
+      modelBuilder.Entity<Inscricao>()
+        .Property(e => e.Id)
+        .IsRequired(true)
+        .ValueGeneratedOnAdd();
+
+      modelBuilder.Entity<Inscricao>()
+        .HasOne(e => e.Usuario)
+        .WithMany(i => i.Inscricoes)
+        .HasForeignKey(e => e.IdUsuario)
+        .OnDelete(DeleteBehavior.Restrict);
+
+      modelBuilder.Entity<Inscricao>()
+        .HasOne(e => e.Evento)
+        .WithMany(i => i.Inscricoes)
+        .HasForeignKey(e => e.IdEvento)
+        .OnDelete(DeleteBehavior.Restrict);
     }
   }
 }

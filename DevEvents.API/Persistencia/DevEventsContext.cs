@@ -88,9 +88,9 @@ namespace DevEvents.API.Persistencia
         .OnDelete(DeleteBehavior.Restrict);
 
       modelBuilder.Entity<Inscricao>()
-        .HasOne(e => e.Evento)
-        .WithMany(i => i.Inscricoes)
-        .HasForeignKey(e => e.IdEvento)
+        .HasOne(i => i.Evento)
+        .WithMany(e => e.Inscricoes)
+        .HasForeignKey(i => i.IdEvento)
         .OnDelete(DeleteBehavior.Restrict);
     }
   }

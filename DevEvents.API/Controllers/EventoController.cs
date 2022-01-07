@@ -22,7 +22,13 @@ namespace DevEvents.API.Controllers
     [HttpGet]
     public IActionResult BuscarTodos()
     {
-      return Ok(_context.Eventos.ToList());
+      var eventos = _context.Eventos
+        .Include(e => e.Categoria)
+        .Include(e => e.Usuario)
+        .Include(e => e.Inscricoes)
+        .ToList();
+      
+      return Ok(eventos);
     }
 
     [HttpGet("{id}")]
@@ -31,7 +37,7 @@ namespace DevEvents.API.Controllers
       var evento = _context.Eventos
         .Include(e => e.Categoria)
         .Include(e => e.Usuario)
-        .Include(e => e.Inscricoes)
+        //.Include(e => e.Inscricoes)
         .SingleOrDefault(e => e.Id == id);
 
       if (evento == null)
@@ -91,6 +97,22 @@ namespace DevEvents.API.Controllers
       evento.IsAtivo = false;
 
       _context.Eventos.Update(evento);
+      _context.SaveChanges();
+
+      return NoContent();
+    }
+
+    [HttpPost("{idEvento}/usuarios/{idUsuario}/inscrever")]
+    public IActionResult Inscrever(int idEvento, int idUsuario, [FromBody] Inscricao inscricao)
+    {
+      var evento = _context.Eventos.SingleOrDefault(ev => ev.Id == idEvento);
+
+      if (evento == null || !evento.IsAtivo)
+      {
+        return BadRequest();
+      }
+
+      _context.Inscricoes.Add(inscricao);
       _context.SaveChanges();
 
       return NoContent();
